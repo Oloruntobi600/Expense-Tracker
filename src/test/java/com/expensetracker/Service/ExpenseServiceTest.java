@@ -42,7 +42,7 @@ class ExpenseServiceTests {
         Long userId = 1L;
         List<Expense> expenses = Arrays.asList(new Expense(), new Expense());
         when(expenseRepository.findByUserId(userId)).thenReturn(expenses);
-        assertEquals(expenses, expenseService.getAllExpenses(userId));
+        assertEquals(expenses, expenseService.getAllExpenses());
     }
 
     @Test

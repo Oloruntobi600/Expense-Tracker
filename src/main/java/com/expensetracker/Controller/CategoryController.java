@@ -26,7 +26,7 @@ public class CategoryController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/category")
     public Category createCategory(@RequestBody Category category) {
         return categoryService.createCategory(category);
     }
@@ -41,8 +41,10 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("User with id " + id + " has been deleted successfully");
     }
+//        return ResponseEntity.notFound().build();
+
 }

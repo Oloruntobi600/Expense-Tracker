@@ -18,8 +18,8 @@ public class ExpenseService {
         return expenseRepository.save(expense);
     }
 
-    public List<Expense> getAllExpenses(Long userId) {
-        return expenseRepository.findByUserId(userId);
+    public List<Expense> getAllExpenses() {
+        return expenseRepository.findAll();
     }
 
     public Optional<Expense> getExpenseById(Long id) {

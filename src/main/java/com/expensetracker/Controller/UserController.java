@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -17,23 +16,23 @@ import java.util.Optional;
         @Autowired
         private UserService userService;
 
-//        @PostMapping("/register")
-//        public ResponseEntity<User> registerUser(@RequestBody User user) {
-//            User newUser = userService.registerUser(user);
-//            return ResponseEntity.ok(newUser);
-//        }
          @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody User user) {
         try {
             System.out.println("Received request to register user: " + user.getUsername());
-            userService.saveUser(user);
+            // Check if user already exists
+            if (userService.getUserByUsername(user.getUsername()).isPresent()) {
+                return ResponseEntity.badRequest().body("User with username " + user.getUsername() + " already exists");
+            }
+            userService.registerUser(user);
             System.out.println("User registered successfully: " + user.getUsername());
-            return ResponseEntity.ok("User registered successfully");
+            return ResponseEntity.ok("User: " + user.getUsername() + " registered successfully"  );
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
     }
+
 
 
         @GetMapping("/{id}")
@@ -53,16 +52,18 @@ import java.util.Optional;
                 User updatedUser = userService.updateUser(user);
                 return ResponseEntity.ok(updatedUser);
             } else {
+                System.out.println("user not found");
                 return ResponseEntity.notFound().build();
             }
         }
 
         @DeleteMapping("/{id}")
-        public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        public ResponseEntity<String> deleteUser(@PathVariable Long id) {
             Optional<User> optionalUser = userService.getUserById(id);
             if (optionalUser.isPresent()) {
                 userService.deleteUser(id);
-                return ResponseEntity.noContent().build();
+                System.out.println("user deleted successfully" );
+                return ResponseEntity.ok("User with id " + id + " has been deleted successfully");
             } else {
                 return ResponseEntity.notFound().build();
             }

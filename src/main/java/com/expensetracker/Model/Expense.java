@@ -1,8 +1,6 @@
 package com.expensetracker.Model;
 
 
-import jdk.jfr.Category;
-
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -23,6 +21,15 @@ public class Expense {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private com.expensetracker.Model.Category category;
+
+    public Expense() {
+    }
+
+    public Expense(Category category, String description, double amount) {
+        this.category = (com.expensetracker.Model.Category) category;
+        this.description = description;
+        this.amount = BigDecimal.valueOf(amount);
+    }
 
     public Long getId() {
         return id;
@@ -64,10 +71,9 @@ public class Expense {
         this.user = user;
     }
 
-    public Category getCategory() {
-        return (Category) category;
+    public com.expensetracker.Model.Category getCategory() {
+        return category;
     }
-
     public void setCategory(Category category) {
         this.category = (com.expensetracker.Model.Category) category;
     }
